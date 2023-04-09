@@ -7,27 +7,26 @@ namespace UGS.IO
 {
     public class UnityFileReader : IFileReader
     {
-        private bool _ = false;
+        static IFileReader s_OverriddenFileReader;
+
+        public static void SetAlternativeFileReader(IFileReader reader)
+        {
+            s_OverriddenFileReader = reader;
+        }
 
         public string ReadData(string fileName)
         {
+            if(s_OverriddenFileReader != null) return s_OverriddenFileReader.ReadData(fileName);
+
             string content = null;
             UGSettingObject setting = Resources.Load<UGSettingObject>("UGSettingObject");
-            if (_)
+            if (Application.isPlaying == false)
             {
-                content = LoadAssetFromDownloadedPath(fileName);
+                content = EditorAssetLoad(fileName);
             }
             else
             {
-
-                if (Application.isPlaying == false)
-                {
-                    content = EditorAssetLoad(fileName);
-                }
-                else
-                {
-                    content = RuntimeAssetLoad(fileName);
-                }
+                content = RuntimeAssetLoad(fileName);
             }
  
             if (setting.base64)
@@ -56,6 +55,7 @@ namespace UGS.IO
 
             return string.Join("/", newPath);
         }
+
         public string EditorAssetLoad(string fileName)
         {
             var combine = System.IO.Path.Combine(UGSettingObjectWrapper.JsonDataPath, fileName);
@@ -91,19 +91,6 @@ namespace UGS.IO
                 return null;
 
             return textasset.text;
-        }
-
-
-        public string LoadAssetFromDownloadedPath(string filename)
-        {
-            var path = System.IO.Path.Combine(Application.persistentDataPath, "ugs/data", filename + ".json");
-            var file = new System.IO.FileInfo(path);
-
-            if (!file.Exists)
-                throw new UGS.Unused.Exceptions.DataFileNotFoundException(path + "경로에 ugs 데이터가 없습니다. 서버로부터 데이터를 받지 않았을 수 있습니다.");
-
-            var content = System.IO.File.ReadAllText(file.FullName);
-            return content;
         }
     }
 }

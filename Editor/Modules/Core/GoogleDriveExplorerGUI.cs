@@ -237,7 +237,7 @@ namespace UGS.Editor
 #endif
         public static void Generate()
         {
-            GoogleSheet.GoogleSpreadSheets.Init(new UnityGSParser(), new UnityFileReader());
+            GoogleSheet.GoogleSpreadSheets.Init(new UnityGSParser());
             var files = GoogleDriveExplorerGUI.GetWindow<GoogleDriveExplorerGUI>().loadedFileData;
             if (Application.isPlaying == false)
             {

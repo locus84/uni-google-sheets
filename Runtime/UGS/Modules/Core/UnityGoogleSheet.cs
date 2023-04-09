@@ -64,7 +64,7 @@ namespace UGS
         {
             //Unity
             if (Init == false)
-                GoogleSpreadSheets.Init(new UnityGSParser(), new UnityFileReader());
+                GoogleSpreadSheets.Init(new UnityGSParser());
             Init = true;
         }
 #endif

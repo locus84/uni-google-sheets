@@ -16,7 +16,7 @@ namespace GoogleSheet
         public static void Initialize(string scriptURL, string password)
         {
             ScriptRequester.Instance.Credential(scriptURL, password);
-            GoogleSpreadSheets.Init(new GSParser(), new FileReader());
+            GoogleSpreadSheets.Init(new GSParser());
         }
 
         /// <summary>
@@ -192,19 +192,13 @@ namespace GoogleSheet
 
     public static class GoogleSpreadSheets
     {
-
         private static IParser _dataParser;
-        private static IFileReader _dataReader;
         public static IParser DataParser { get => _dataParser; }
-        public static IFileReader DataReader { get => _dataReader; }
 
-
-
-        public static void Init(IParser parser, IFileReader reader)
+        public static void Init(IParser parser)
         {
             TypeMap.Init();
             _dataParser = parser;
-            _dataReader = reader;
         }
     }
 }
